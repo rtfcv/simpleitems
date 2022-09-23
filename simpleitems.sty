@@ -1,3 +1,4 @@
+% define actual hooks
 \newcommand{\do@BeginSubItem}{%
   \let\@BeginSubItem\@inactive% deactivate @Begin...SubItem
   \let\@EndSubItem\do@EndSubItem% activate @End...SubItem
@@ -34,7 +35,7 @@
 \newcommand{\@inactive}{}
 
 
-
+% Define simpleitems environment here
 \newenvironment{simpleitems}{%
 % define hooks
   \newcommand{\@BeginSubItem}{}%
@@ -43,13 +44,16 @@
   \newcommand{\@EndSubSubItem}{}%
   \newcommand{\@BeginSubSubSubItem}{}%
   \newcommand{\@EndSubSubSubItem}{}%
+%
 % activate begin hooks
   \let\@BeginSubItem\do@BeginSubItem% activate @BeginSubItem%
   \let\@BeginSubSubItem\do@BeginSubSubItem% activate @BeginSubSubItem%
   \let\@BeginSubSubSubItem\do@BeginSubSubSubItem% activate @BeginSubSubSubItem%
+%
 % begin actual environment
   \begin{itemize}%
     \let\@originalitem=\item%
+%
 % redefine \item to terminate sub*item
     \renewcommand{\item}{%
       \@EndSubSubSubItem%
@@ -58,20 +62,23 @@
       \@originalitem
     }%
 %
-    \newcommand{\subitem}{%
+% Define \iitem command
+    \newcommand{\iitem}{%
       \@EndSubSubSubItem%
       \@EndSubSubItem%
       \@BeginSubItem%
         \@originalitem
     }%
 %
-    \newcommand{\subsubitem}{%
+% define \iiitem command
+    \newcommand{\iiitem}{%
       \@EndSubSubSubItem%
       \@BeginSubSubItem%
         \@originalitem
     }%
 %
-    \newcommand{\subsubsubitem}{%
+% define \iiiitem command
+    \newcommand{\iiiitem}{%
       \@BeginSubSubSubItem%
         \@originalitem
     }%
@@ -80,10 +87,11 @@
     \@EndSubSubItem%
     \@EndSubItem
   \end{itemize}
-% undefine macros
-  \let\subitem=\undefined
-  \let\subsubitem=\undefined
-  \let\subsubsubitem=\undefined
+%
+% undefine macros that is only meant to be used in this environment
+  \let\iitem=\undefined
+  \let\iiitem=\undefined
+  \let\iiiitem=\undefined
   \let\@BeginSubItem=\undefined
   \let\@EndSubItem=\undefined
   \let\@BeginSubSubItem=\undefined
@@ -91,14 +99,3 @@
   \let\@BeginSubSubSubItem=\undefined
   \let\@EndSubSubSubItem=\undefined
 }
-
-% we somehow need these. why?
-\let\subitem=\undefined
-\let\subsubitem=\undefined
-\let\subsubsubitem=\undefined
-\let\@BeginSubItem=\undefined
-\let\@EndSubItem=\undefined
-\let\@BeginSubSubItem=\undefined
-\let\@EndSubSubItem=\undefined
-\let\@BeginSubSubSubItem=\undefined
-\let\@EndSubSubSubItem=\undefined
