@@ -1,0 +1,104 @@
+\newcommand{\do@BeginSubItem}{%
+  \let\@BeginSubItem\@inactive% deactivate @Begin...SubItem
+  \let\@EndSubItem\do@EndSubItem% activate @End...SubItem
+  \begin{itemize}
+}
+\newcommand{\do@EndSubItem}{
+  \end{itemize}
+  \let\@BeginSubItem\do@BeginSubItem% activate @Begin...SubItem
+  \let\@EndSubItem\@inactive% deactivate @End...SubItem
+}
+
+\newcommand{\do@BeginSubSubItem}{%
+  \let\@BeginSubSubItem\@inactive% deactivate @BeginSubSubItem
+  \let\@EndSubSubItem\do@EndSubSubItem% activate @EndSubSubItem
+  \begin{itemize}
+}
+\newcommand{\do@EndSubSubItem}{
+  \end{itemize}
+  \let\@BeginSubSubItem\do@BeginSubSubItem% activate @BeginSubSubItem
+  \let\@EndSubSubItem\@inactive% deactivate @EndSubSubItem
+}
+
+\newcommand{\do@BeginSubSubSubItem}{%
+  \let\@BeginSubSubSubItem\@inactive% deactivate @BeginSubSubSubItem
+  \let\@EndSubSubSubItem\do@EndSubSubSubItem% activate @EndSubSubSubItem
+  \begin{itemize}
+}
+\newcommand{\do@EndSubSubSubItem}{
+  \end{itemize}
+  \let\@BeginSubSubSubItem\do@BeginSubSubSubItem% activate @BeginSubSubSubItem
+  \let\@EndSubSubSubItem\@inactive% deactivate @EndSubSubSubItem
+}
+
+\newcommand{\@inactive}{}
+
+
+
+\newenvironment{simpleitems}{%
+% define hooks
+  \newcommand{\@BeginSubItem}{}%
+  \newcommand{\@EndSubItem}{}%
+  \newcommand{\@BeginSubSubItem}{}%
+  \newcommand{\@EndSubSubItem}{}%
+  \newcommand{\@BeginSubSubSubItem}{}%
+  \newcommand{\@EndSubSubSubItem}{}%
+% activate begin hooks
+  \let\@BeginSubItem\do@BeginSubItem% activate @BeginSubItem%
+  \let\@BeginSubSubItem\do@BeginSubSubItem% activate @BeginSubSubItem%
+  \let\@BeginSubSubSubItem\do@BeginSubSubSubItem% activate @BeginSubSubSubItem%
+% begin actual environment
+  \begin{itemize}%
+    \let\@originalitem=\item%
+% redefine \item to terminate sub*item
+    \renewcommand{\item}{%
+      \@EndSubSubSubItem%
+      \@EndSubSubItem%
+      \@EndSubItem%
+      \@originalitem
+    }%
+%
+    \newcommand{\subitem}{%
+      \@EndSubSubSubItem%
+      \@EndSubSubItem%
+      \@BeginSubItem%
+        \@originalitem
+    }%
+%
+    \newcommand{\subsubitem}{%
+      \@EndSubSubSubItem%
+      \@BeginSubSubItem%
+        \@originalitem
+    }%
+%
+    \newcommand{\subsubsubitem}{%
+      \@BeginSubSubSubItem%
+        \@originalitem
+    }%
+}{%
+    \@EndSubSubSubItem%
+    \@EndSubSubItem%
+    \@EndSubItem
+  \end{itemize}
+% undefine macros
+  \let\subitem=\undefined
+  \let\subsubitem=\undefined
+  \let\subsubsubitem=\undefined
+  \let\@BeginSubItem=\undefined
+  \let\@EndSubItem=\undefined
+  \let\@BeginSubSubItem=\undefined
+  \let\@EndSubSubItem=\undefined
+  \let\@BeginSubSubSubItem=\undefined
+  \let\@EndSubSubSubItem=\undefined
+}
+
+% we somehow need these. why?
+\let\subitem=\undefined
+\let\subsubitem=\undefined
+\let\subsubsubitem=\undefined
+\let\@BeginSubItem=\undefined
+\let\@EndSubItem=\undefined
+\let\@BeginSubSubItem=\undefined
+\let\@EndSubSubItem=\undefined
+\let\@BeginSubSubSubItem=\undefined
+\let\@EndSubSubSubItem=\undefined
